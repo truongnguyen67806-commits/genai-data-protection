@@ -1,0 +1,45 @@
+
+[
+  {
+    "id": "TC01",
+    "scenario": "hoc_tap",
+    "input": "Tôi là Nguyễn Văn An, mã sinh viên SV2024001, GPA: 3.5.",
+    "expected_labels": ["PERSON_NAME", "STUDENT_ID", "ACADEMIC_RECORD"]
+  },
+  {
+    "id": "TC02",
+    "scenario": "hanh_chinh",
+    "input": "Liên hệ sinh viên qua số điện thoại 0912345678, email an.nguyen@example.com.",
+    "expected_labels": ["PHONE", "EMAIL"]
+  },
+  {
+    "id": "TC03",
+    "scenario": "hanh_chinh",
+    "input": "Thông tin căn cước: CCCD 012345678901.",
+    "expected_labels": ["NATIONAL_ID"]
+  },
+  {
+    "id": "TC04",
+    "scenario": "cntt",
+    "input": "password: DemoPass123! và API key sk-abcdefghijklmnopqrstuvwxyz123456.",
+    "expected_labels": ["CREDENTIAL", "SECRET_KEY"]
+  },
+  {
+    "id": "TC05",
+    "scenario": "cntt",
+    "input": "Số tài khoản ngân hàng: 123456789012.",
+    "expected_labels": ["BANK_ACCOUNT"]
+  },
+  {
+    "id": "TC06",
+    "scenario": "hoc_tap",
+    "input": "Hôm nay nhóm tôi thảo luận về trí tuệ nhân tạo và bảo vệ dữ liệu.",
+    "expected_labels": []
+  },
+  {
+    "id": "TC07",
+    "scenario": "hanh_chinh",
+    "input": "Địa chỉ liên hệ: 123 Đường Lê Lợi, Hải Phòng.",
+    "expected_labels": ["ADDRESS"]
+  }
+]
