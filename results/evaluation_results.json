@@ -1,0 +1,197 @@
+[
+  {
+    "method": "REGEX",
+    "TP": 360,
+    "FP": 0,
+    "FN": 90,
+    "precision": 1.0,
+    "recall": 0.8,
+    "f1": 0.888888888888889,
+    "miss_rate": 0.2,
+    "time_seconds": 0.012047500000335276,
+    "avg_time_ms": 0.06023750000167638,
+    "predictions": 360,
+    "label_stats": {
+      "PERSON_NAME": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "STUDENT_ID": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "BANK_ACCOUNT": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "EMAIL": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "NATIONAL_ID": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "CREDENTIAL": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "SECRET_KEY": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "ADDRESS": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "ACADEMIC_RECORD": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "PHONE": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      }
+    }
+  },
+  {
+    "method": "NER",
+    "TP": 89,
+    "FP": 52,
+    "FN": 361,
+    "precision": 0.6312056737588653,
+    "recall": 0.19777777777777777,
+    "f1": 0.30118443316412863,
+    "miss_rate": 0.8022222222222222,
+    "time_seconds": 2.5009365999967486,
+    "avg_time_ms": 12.504682999983743,
+    "predictions": 141,
+    "label_stats": {
+      "PERSON_NAME": {
+        "TP": 45,
+        "FP": 51,
+        "FN": 0
+      },
+      "STUDENT_ID": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "BANK_ACCOUNT": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "EMAIL": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "NATIONAL_ID": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "CREDENTIAL": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "SECRET_KEY": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "ADDRESS": {
+        "TP": 44,
+        "FP": 1,
+        "FN": 1
+      },
+      "ACADEMIC_RECORD": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      },
+      "PHONE": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 45
+      }
+    }
+  },
+  {
+    "method": "HYBRID",
+    "TP": 449,
+    "FP": 2,
+    "FN": 1,
+    "precision": 0.9955654101995566,
+    "recall": 0.9977777777777778,
+    "f1": 0.9966703662597114,
+    "miss_rate": 0.0022222222222222222,
+    "time_seconds": 1.3864291999998386,
+    "avg_time_ms": 6.932145999999193,
+    "predictions": 451,
+    "label_stats": {
+      "PERSON_NAME": {
+        "TP": 45,
+        "FP": 1,
+        "FN": 0
+      },
+      "STUDENT_ID": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "BANK_ACCOUNT": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "EMAIL": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "NATIONAL_ID": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "SECRET_KEY": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "ADDRESS": {
+        "TP": 44,
+        "FP": 1,
+        "FN": 1
+      },
+      "ACADEMIC_RECORD": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "CREDENTIAL": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      },
+      "PHONE": {
+        "TP": 45,
+        "FP": 0,
+        "FN": 0
+      }
+    }
+  }
+]

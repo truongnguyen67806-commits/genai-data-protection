@@ -45,7 +45,7 @@ from src.regex_detector import detect_sensitive_entities
         (
             "GPA: 3.5",
             "ACADEMIC_RECORD",
-            "3.5"
+            "GPA: 3.5"
         ),
     ]
 )

@@ -1,3 +1,4 @@
+import re
 
 def detect_ner(text):
     from underthesea import ner
@@ -90,11 +91,13 @@ def detect_ner(text):
         "thuong tru"
     ]
 
-    address_text = text.lower()
-    is_address_context = any(
-        keyword in address_text
-        for keyword in address_keywords
-    )
+    def has_nearby_address_context(start, window=60):
+        context = text[max(0, start - window):start].lower()
+
+        return any(
+            keyword in context
+            for keyword in address_keywords
+        )
 
     # Gop cac vung LOC neu chung cach nhau boi dau phay
     merged_locations = []
@@ -114,11 +117,33 @@ def detect_ner(text):
 
     results = []
 
-    # Tao ket qua PERSON_NAME
+    # Cac tu khong duoc xem la ten nguoi
+    # Cac tu khong duoc xem la ten nguoi
+    person_exclusions = {
+        "cccd",
+        "cmnd",
+        "gpa",
+        "email",
+        "api",
+        "log",
+        "mssv",
+        "password",
+        "điểm",
+        "hồ sơ",
+        "mã"
+    }
+
+    # Tao ket qua PERSON_NAME sau khi loc tu khoa
     for group in person_groups:
+        person_text = text[group["start"]:group["end"]]
+        normalized_person = person_text.strip().lower()
+
+        if normalized_person in person_exclusions:
+            continue
+
         results.append({
             "label": "PERSON_NAME",
-            "text": text[group["start"]:group["end"]],
+            "text": person_text,
             "start": group["start"],
             "end": group["end"],
             "confidence": 0.80,
@@ -126,13 +151,24 @@ def detect_ner(text):
         })
 
     # Tao ket qua ADDRESS neu co ngu canh phu hop
-    if is_address_context:
-        for group in merged_locations:
+    for group in merged_locations:
+        if has_nearby_address_context(group["start"]):
+            start = group["start"]
+            end = group["end"]
+
+            # Mo rong lay so nha neu co ngay truoc ten duong
+            prefix_start = max(0, start - 10)
+            prefix = text[prefix_start:start]
+            match = re.search(r"(\d+[A-Za-z]?)\s+$", prefix)
+
+            if match:
+                start = prefix_start + match.start(1)
+
             results.append({
                 "label": "ADDRESS",
-                "text": text[group["start"]:group["end"]],
-                "start": group["start"],
-                "end": group["end"],
+                "text": text[start:end],
+                "start": start,
+                "end": end,
                 "confidence": 0.75,
                 "method": "NER"
             })

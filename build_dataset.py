@@ -153,7 +153,6 @@ def build_sensitive_text(labels, sample_index, scenario):
 
     text = rng.choice(scenario_openers[scenario])
     entities = []
-    text += f" (mẫu kiểm thử {sample_index})"
 
     for position, label in enumerate(labels):
         value = make_value(label, sample_index * 10 + position)
@@ -182,34 +181,114 @@ def build_sensitive_text(labels, sample_index, scenario):
 # TAO MAU KHONG CO DU LIEU NHAY CAM
 # =========================================================
 
-CLEAN_TEXTS = [
-    "Hôm nay nhóm thảo luận về trí tuệ nhân tạo trong giáo dục.",
-    "Hãy giải thích sự khác nhau giữa dữ liệu có cấu trúc và phi cấu trúc.",
-    "Viết chương trình Python sắp xếp danh sách số nguyên.",
-    "Sinh viên cần đọc tài liệu trước khi tham gia buổi thảo luận.",
-    "Hệ thống cần cải thiện tốc độ xử lý truy vấn.",
-    "Bài báo trình bày phương pháp học máy trong phân loại văn bản.",
-    "Nhóm sẽ hoàn thiện báo cáo vào cuối học kỳ.",
-    "Máy chủ thử nghiệm đang chạy phiên bản phần mềm mới.",
-    "Hãy hướng dẫn cách tạo bảng trong cơ sở dữ liệu.",
-    "Nội dung này chỉ trình bày kiến thức lập trình cơ bản.",
-]
+# =========================================================
+# SINH NOI DUNG AM TINH DA DANG
+# =========================================================
 
-HARD_NEGATIVE_TEXTS = [
-    "Phiên bản phần mềm hiện tại là 2.4.1.",
-    "Máy chủ thử nghiệm sử dụng cổng dịch vụ 8080.",
-    "Mã học phần của môn học là CNTT2026.",
-    "Địa chỉ IP máy chủ thử nghiệm là 192.168.1.10.",
-    "Ví dụ định dạng số điện thoại là 0xxxxxxxxx.",
-    "Biểu mẫu yêu cầu người dùng điền [MSSV] vào ô tương ứng.",
-    "Mã đơn hàng giả lập là DH202600123.",
-    "Giá trị UUID mẫu là 123e4567-e89b-12d3-a456-426614174000.",
-    "Email phòng ban minh họa là phongdaotao@example.edu.vn.",
-    "Mã lỗi hệ thống được ghi nhận là ERR-404.",
-    "Hàm kiểm tra chuỗi hash SHA256 trong bài thực hành.",
-    "Hotline công khai của đơn vị được ghi trong tài liệu hướng dẫn.",
-]
+def build_negative_text(scenario, is_hard_negative, variant_index):
+    """Sinh câu âm tính theo kịch bản, không chứa thực thể nhạy cảm."""
 
+    clean_templates = {
+        "hoc_tap": [
+            "Nhóm sinh viên đang thảo luận về {} trong buổi học.",
+            "Giảng viên yêu cầu lớp tìm hiểu thêm về {}.",
+            "Bài tập tuần này tập trung phân tích {}.",
+            "Tài liệu học tập trình bày kiến thức về {}.",
+            "Các thành viên cùng trao đổi phương pháp {}.",
+            "Buổi thảo luận hôm nay đề cập đến {}.",
+            "Nhóm nghiên cứu đang hoàn thiện nội dung về {}.",
+            "Sinh viên cần đọc thêm tài liệu liên quan đến {}.",
+        ],
+        "hanh_chinh": [
+            "Phòng đào tạo đang cập nhật hướng dẫn về {}.",
+            "Biểu mẫu hành chính được thiết kế để phục vụ {}.",
+            "Bộ phận hỗ trợ đang rà soát quy trình {}.",
+            "Thông báo mới trình bày các bước thực hiện {}.",
+            "Nhà trường đang cải tiến quy trình {}.",
+            "Tài liệu hướng dẫn giải thích cách thực hiện {}.",
+            "Cuộc họp hôm nay tập trung vào nội dung {}.",
+            "Bộ phận hành chính đang tổng hợp thông tin về {}.",
+        ],
+        "cntt": [
+            "Nhóm phát triển đang kiểm thử chức năng {}.",
+            "Máy chủ thử nghiệm được cấu hình để phục vụ {}.",
+            "Bài thực hành hướng dẫn cách triển khai {}.",
+            "Hệ thống cần tối ưu quy trình {}.",
+            "Lập trình viên đang nghiên cứu phương pháp {}.",
+            "Tài liệu kỹ thuật mô tả hoạt động của {}.",
+            "Nhóm CNTT đang đánh giá hiệu năng {}.",
+            "Cơ sở dữ liệu thử nghiệm được dùng để minh họa {}.",
+        ],
+    }
+
+    clean_topics = {
+        "hoc_tap": [
+            "học máy", "phân loại văn bản", "trí tuệ nhân tạo",
+            "phương pháp nghiên cứu", "xử lý ngôn ngữ tự nhiên",
+            "học trực tuyến", "phân tích dữ liệu", "làm việc nhóm",
+        ],
+        "hanh_chinh": [
+            "đăng ký học phần", "quản lý tài liệu", "tiếp nhận yêu cầu",
+            "xử lý biểu mẫu", "lưu trữ hồ sơ", "quản lý lịch học",
+            "cải tiến dịch vụ", "số hóa quy trình",
+        ],
+        "cntt": [
+            "sắp xếp dữ liệu", "kiểm thử phần mềm", "truy vấn SQL",
+            "tối ưu thuật toán", "xử lý ngoại lệ", "sao lưu dữ liệu",
+            "phân tích nhật ký", "quản lý phiên bản",
+        ],
+    }
+
+    hard_templates = {
+        "hoc_tap": [
+            "Tài liệu môn học dùng mã minh họa {} để giải thích định dạng.",
+            "Bài thực hành trình bày chuỗi ví dụ {}.",
+            "Giảng viên sử dụng giá trị giả lập {} trong bài giảng.",
+            "Nội dung học tập giải thích ý nghĩa của ký hiệu {}.",
+        ],
+        "hanh_chinh": [
+            "Biểu mẫu hướng dẫn sử dụng ký hiệu giữ chỗ {}.",
+            "Tài liệu quy trình ghi giá trị minh họa {}.",
+            "Thông báo giải thích định dạng mẫu {}.",
+            "Hướng dẫn hành chính dùng chuỗi giả lập {} để minh họa.",
+        ],
+        "cntt": [
+            "Log kiểm thử ghi nhận giá trị ví dụ {}.",
+            "Môi trường lab sử dụng chuỗi giả lập {}.",
+            "Tài liệu kỹ thuật giải thích định dạng {}.",
+            "Bài thực hành dùng giá trị minh họa {} để kiểm tra xử lý.",
+        ],
+    }
+
+    hard_examples = [
+        "VERSION-EXAMPLE",
+        "PORT-EXAMPLE",
+        "COURSE-CODE-EXAMPLE",
+        "IP-EXAMPLE",
+        "PHONE-PLACEHOLDER",
+        "STUDENT-ID-PLACEHOLDER",
+        "ORDER-ID-EXAMPLE",
+        "UUID-EXAMPLE",
+        "EMAIL-EXAMPLE",
+        "ERROR-CODE-EXAMPLE",
+        "HASH-EXAMPLE",
+        "PUBLIC-HOTLINE-REFERENCE",
+    ]
+
+    if is_hard_negative:
+        variants = [
+            template.format(example)
+            for template in hard_templates[scenario]
+            for example in hard_examples
+        ]
+    else:
+        variants = [
+            template.format(topic)
+            for template in clean_templates[scenario]
+            for topic in clean_topics[scenario]
+        ]
+
+    return variants[variant_index % len(variants)]
 
 # =========================================================
 # PHAN LOAI RUI RO
@@ -273,6 +352,11 @@ def generate_dataset():
     ]
 
     sample_index = 0
+    negative_variant_counters = {
+        (scenario, is_hard): 0
+        for scenario in SCENARIOS
+        for is_hard in (True, False)
+    }
 
     for split, total, positive_count, negative_count in split_plan:
 
@@ -281,7 +365,7 @@ def generate_dataset():
             sample_index += 1
 
             if local_index < positive_count:
-                # Mỗi mẫu có 2–4 nhãn khác nhau.
+                # Moi mau co 2-4 nhan khac nhau.
                 number_of_entities = 2 + (local_index % 3)
                 start_label = (local_index * 3) % len(LABELS)
 
@@ -307,18 +391,20 @@ def generate_dataset():
                 negative_index = local_index - positive_count
                 is_hard_negative = negative_index < negative_count * 0.4
 
-                if is_hard_negative:
-                    text = HARD_NEGATIVE_TEXTS[
-                        negative_index % len(HARD_NEGATIVE_TEXTS)
-                    ]
-                    template_type = "HARD"
-                else:
-                    text = CLEAN_TEXTS[
-                        negative_index % len(CLEAN_TEXTS)
-                    ]
-                    template_type = "CLEAN"
-
                 scenario = SCENARIOS[negative_index % len(SCENARIOS)]
+
+                variant_key = (scenario, is_hard_negative)
+                variant_index = negative_variant_counters[variant_key]
+
+                text = build_negative_text(
+                    scenario,
+                    is_hard_negative,
+                    variant_index,
+                )
+
+                negative_variant_counters[variant_key] += 1
+
+                template_type = "HARD" if is_hard_negative else "CLEAN"
                 entities = []
 
                 template_id = (
@@ -326,8 +412,6 @@ def generate_dataset():
                 )
 
             text = unicodedata.normalize("NFC", text)
-            text += f" (ID mau: {sample_index})"
-
 
             record = {
                 "id": f"S{sample_index:04d}",
@@ -339,14 +423,18 @@ def generate_dataset():
                 "risk_level": calculate_risk(entities),
                 "has_sensitive": bool(entities),
                 "no_diacritics": not bool(
-        re.search(r"[à-ỹÀ-ỸđĐ]", text)
-    ),
-    "review_status": "DRAFT",
-    "reviewer": "",
-    "note": "Dữ liệu tổng hợp tự động; cần rà soát thủ công.",
-}
+                    re.search(
+                        r"[\u00e0-\u1ef9\u00c0-\u1ef8\u0111\u0110]",
+                        text,
+                    )
+                ),
+                "review_status": "DRAFT",
+                "reviewer": "",
+                "note": "Synthetic data; manual review required.",
+            }
 
-records.append(record)
+            records.append(record)
+    return records
 
 
 # =========================================================

@@ -11,24 +11,27 @@ def normalize_text(text):
 # Cac tu khoa dung de xac dinh ngu canh du lieu nhay cam
 CONTEXT_KEYWORDS = {
     "STUDENT_ID": [
-        
         "mssv",
         "mã sinh viên",
         "ma sinh vien",
         "student id"
     ],
     "NATIONAL_ID": [
-        "cccd", "cmnd", "can cuoc", "chung minh nhan dan"
+        "cccd",
+        "cmnd",
+        "căn cước",
+        "can cuoc",
+        "chứng minh nhân dân",
+        "chung minh nhan dan"
     ],
     "BANK_ACCOUNT": [
-        "so tai khoan",
         "số tài khoản",
+        "so tai khoan",
         "stk",
-        "tai khoan ngan hang",
-        "tài khoản ngân hàng"
+        "tài khoản ngân hàng",
+        "tai khoan ngan hang"
     ],
 }
-
 
 # Cac mau Regex
 PATTERNS = {
@@ -62,28 +65,44 @@ PATTERNS = {
     "CREDENTIAL": re.compile(
         r"(?i)(?:mật\s*khẩu|mat\s*khau|password|passwd|"
         r"pin|otp|mã\s*xác\s*thực|ma\s*xac\s*thuc)"
-        r"\s*[:=]\s*(\S{4,})"
+        r"\s*[:=]\s*([^\s;,.]+[!?]?)"
     ),
     "ACADEMIC_RECORD": re.compile(
-        r"(?i)(?:GPA|diem\s*trung\s*binh|"
-        r"diem\s*thi|xep\s*loai|hoc\s*bong|"
-        r"ky\s*luat|canh\s*cao\s*hoc\s*vu)"
-        r"\s*[:=]?\s*"
-        r"(3[.,]?\d?|[0-2][.,]\d+|[0-9]+|"
-        r"gioi|kha|trung\s*binh|yeu|"
-        r"duoc\s*cap|bi\s*canh\s*cao)"
-    ),
+    r"(?i)((?:GPA|điểm\s*trung\s*bình|diem\s*trung\s*binh|"
+    r"điểm\s*thi|diem\s*thi|xếp\s*loại|xep\s*loai|"
+    r"học\s*bổng|hoc\s*bong|kỷ\s*luật|ky\s*luat|"
+    r"cảnh\s*cáo\s*học\s*vụ|canh\s*cao\s*hoc\s*vu)"
+    r"\s*[:=]?\s*"
+    r"(?:[0-9]+[.,][0-9]+|[0-9]+|"
+    r"giỏi|gioi|khá|kha|trung\s*bình|trung\s*binh|"
+    r"yếu|yeu|được\s*cấp|duoc\s*cap|"
+    r"bị\s*cảnh\s*cáo|bi\s*canh\s*cao))"
+),
 }
 
 
 def has_context(text, start, label, window=60):
     """
-    Kiem tra tu khoa ngu canh o phia truoc du lieu.
+    Xac dinh loai du lieu theo tu khoa ngu canh gan nhat.
     """
-    keywords = CONTEXT_KEYWORDS.get(label, [])
     context = text[max(0, start - window):start].lower()
 
-    return any(keyword in context for keyword in keywords)
+    nearest_label = None
+    nearest_position = -1
+
+    for candidate_label in [
+        "STUDENT_ID",
+        "NATIONAL_ID",
+        "BANK_ACCOUNT"
+    ]:
+        for keyword in CONTEXT_KEYWORDS.get(candidate_label, []):
+            position = context.rfind(keyword)
+
+            if position > nearest_position:
+                nearest_position = position
+                nearest_label = candidate_label
+
+    return nearest_label == label
 
 
 def detect_sensitive_entities(input_text):
@@ -101,11 +120,8 @@ def detect_sensitive_entities(input_text):
         for match in pattern.finditer(text):
 
             # Lay vi tri rieng cua gia tri du lieu
-            if label in [
-                "STUDENT_ID",
-                "CREDENTIAL",
-                "ACADEMIC_RECORD"
-            ]:
+            # Lay vi tri cua du lieu nhay cam
+            if label in ["STUDENT_ID", "CREDENTIAL", "ACADEMIC_RECORD"]:
                 start, end = match.span(1)
             else:
                 start, end = match.span()

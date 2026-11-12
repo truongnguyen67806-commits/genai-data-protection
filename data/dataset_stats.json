@@ -1,0 +1,49 @@
+{
+    "version": "draft-1.0",
+    "seed": 2026,
+    "total_samples": 1000,
+    "total_entities": 2250,
+    "split_stats": {
+        "train": {
+            "samples": 700,
+            "entities": 1575,
+            "sensitive_samples": 525,
+            "empty_samples": 175
+        },
+        "dev": {
+            "samples": 100,
+            "entities": 225,
+            "sensitive_samples": 75,
+            "empty_samples": 25
+        },
+        "test": {
+            "samples": 200,
+            "entities": 450,
+            "sensitive_samples": 150,
+            "empty_samples": 50
+        }
+    },
+    "label_stats": {
+        "PERSON_NAME": 224,
+        "STUDENT_ID": 224,
+        "EMAIL": 226,
+        "NATIONAL_ID": 226,
+        "BANK_ACCOUNT": 226,
+        "CREDENTIAL": 226,
+        "SECRET_KEY": 226,
+        "ACADEMIC_RECORD": 224,
+        "ADDRESS": 224,
+        "PHONE": 224
+    },
+    "scenario_stats": {
+        "hoc_tap": 335,
+        "hanh_chinh": 333,
+        "cntt": 332
+    },
+    "risk_stats": {
+        "medium": 126,
+        "high": 624,
+        "none": 250
+    },
+    "note": "Du lieu tong hop tu dong, chua duoc xac nhan thu cong."
+}
